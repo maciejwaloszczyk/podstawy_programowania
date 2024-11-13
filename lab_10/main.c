@@ -1,5 +1,32 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+//7.1 Zaprojektowanie nowego typu strukturalnego zawierającej pola, pośród których znajduje się tablica znaków
+#define N 5
+
+typedef struct {
+    double d;
+    char tab_c[N];
+    int m;
+} NewStruct;
+
+void check_sizeof() {
+    for (int i = 1; i <= 5; i++) {
+        printf("Rozmiar struktury dla N = %d: %zu bajtów\n", i, sizeof(NewStruct));
+    }
+}
+
+//Wyrównanie adresów (address alignment) polega na umieszczaniu zmiennych w pamięci na adresach, które są wielokrotnością pewnej liczby (zwykle rozmiaru typu danych). Dla przykładu, zmienna typu 'double' (8 bajtów) będzie wyrównana do adresu będącego wielokrotnością 8. Wyrównanie to jest wymagane przez architekturę procesora, aby zapewnić efektywny dostęp do pamięci.
+//W przypadku naszej struktury, wyrównanie powoduje, że pola są umieszczane w pamięci w taki sposób, aby każde pole zaczynało się na odpowiednio wyrównanym adresie. To może prowadzić do dodania tzw. paddingu (wypełnienia) między polami, co zwiększa całkowity rozmiar struktury.
+
+typedef struct Node {
+    int value;
+    struct Node *next;
+} Node;
+
+// Wyjaśnienie:
+// W strukturze pole nie może być zmienną tego samego typu, ponieważ prowadziłoby to do nieskończonej rekursji w alokacji pamięci.
+// Jednak pole może być wskaźnikiem do tego samego typu, co pozwala na tworzenie powiązanych struktur danych, takich jak listy powiązane.
 
 // 3.a bez użycia typedef
 typedef struct {
@@ -112,6 +139,61 @@ void fun_strukt_wsk(Instrument *instr) {
     printf("Ma suwak: %d\n", instr->ma_suwak);
 }
 
+// 6.1 fun_strukt_wsk_out, która przyjmuje jako argument strukturę zaprojektowanego typu i zwraca wskaźnik do struktury tego typu
+Instrument* fun_strukt_wsk_out(Instrument *instr) {
+    Instrument *new_instr = (Instrument *)malloc(sizeof(Instrument));
+    if (new_instr == NULL) {
+        printf("Błąd alokacji pamięci!\n");
+        exit(1);
+    }
+
+    strcpy(new_instr->nazwa, instr->nazwa);
+    strcpy(new_instr->marka, instr->marka);
+    strcpy(new_instr->model, instr->model);
+    strcpy(new_instr->rodzina, instr->rodzina);
+    strcpy(new_instr->najnizszy_dzwiek, instr->najnizszy_dzwiek);
+    strcpy(new_instr->najwyzszy_dzwiek, instr->najwyzszy_dzwiek);
+    new_instr->rok_produkcji = instr->rok_produkcji;
+    new_instr->liczba_strun = instr->liczba_strun;
+    new_instr->ma_smyczek = instr->ma_smyczek;
+    new_instr->liczba_tlokow = instr->liczba_tlokow;
+    new_instr->ma_suwak = instr->ma_suwak;
+
+    printf("Rozmiar struktury Instrument: %zu bajtów\n", sizeof(Instrument));
+
+    return new_instr;
+}
+// 6.2 fun_strukt_wsk_out, która przyjmuje jako argument strukturę zaprojektowanego typu i zwraca wskaźnik do struktury tego typu
+void fun_strukt_wsk_inout(Instrument *instr) {
+    Instrument local_instr = *instr;
+
+    strcpy(local_instr.nazwa, "Gitara");
+    strcpy(local_instr.marka, "Fender");
+    strcpy(local_instr.model, "Stratocaster");
+    strcpy(local_instr.rodzina, "Strunowe szarpane");
+    strcpy(local_instr.najnizszy_dzwiek, "E2");
+    strcpy(local_instr.najwyzszy_dzwiek, "E6");
+    local_instr.rok_produkcji = 2021;
+    local_instr.liczba_strun = 6;
+    local_instr.ma_smyczek = 0;
+    local_instr.liczba_tlokow = 0;
+    local_instr.ma_suwak = 0;
+
+    printf("\nZmodyfikowane wartości pól lokalnej kopii instrumentu w fun_strukt_wsk_inout:\n");
+    printf("Nazwa: %s\n", local_instr.nazwa);
+    printf("Marka: %s\n", local_instr.marka);
+    printf("Model: %s\n", local_instr.model);
+    printf("Rodzina: %s\n", local_instr.rodzina);
+    printf("Najniższy dźwięk: %s\n", local_instr.najnizszy_dzwiek);
+    printf("Najwyższy dźwięk: %s\n", local_instr.najwyzszy_dzwiek);
+    printf("Rok produkcji: %d\n", local_instr.rok_produkcji);
+    printf("Liczba strun: %d\n", local_instr.liczba_strun);
+    printf("Ma smyczek: %d\n", local_instr.ma_smyczek);
+    printf("Liczba tłoków: %d\n", local_instr.liczba_tlokow);
+    printf("Ma suwak: %d\n", local_instr.ma_suwak);
+
+    *instr = local_instr;
+}
 int main() {
     
     // 4.1 definicja zmiennej (np. obiekt_1) typu strukturalnego
@@ -199,6 +281,40 @@ int main() {
     printf("Rok wydania: %d\n", utwor2.rok_wydania);
     printf("Gatunek: %s\n", utwor2.gatunek);
     printf("Epoka: %s\n", utwor2.epoka);
+
+    // 6.4 wywołanie funkcji
+    Instrument instrument2 = instrument1;
+
+    printf("\nPoczątkowe wartości pól instrument2:\n");
+    printf("Nazwa: %s\n", instrument2.nazwa);
+    printf("Marka: %s\n", instrument2.marka);
+    printf("Model: %s\n", instrument2.model);
+    printf("Rodzina: %s\n", instrument2.rodzina);
+    printf("Najniższy dźwięk: %s\n", instrument2.najnizszy_dzwiek);
+    printf("Najwyższy dźwięk: %s\n", instrument2.najwyzszy_dzwiek);
+    printf("Rok produkcji: %d\n", instrument2.rok_produkcji);
+    printf("Liczba strun: %d\n", instrument2.liczba_strun);
+    printf("Ma smyczek: %d\n", instrument2.ma_smyczek);
+    printf("Liczba tłoków: %d\n", instrument2.liczba_tlokow);
+    printf("Ma suwak: %d\n", instrument2.ma_suwak);
+
+    fun_strukt_wsk_inout(&instrument2);
+
+    printf("\nWartości pól instrument2 po powrocie z fun_strukt_wsk_inout:\n");
+    printf("Nazwa: %s\n", instrument2.nazwa);
+    printf("Marka: %s\n", instrument2.marka);
+    printf("Model: %s\n", instrument2.model);
+    printf("Rodzina: %s\n", instrument2.rodzina);
+    printf("Najniższy dźwięk: %s\n", instrument2.najnizszy_dzwiek);
+    printf("Najwyższy dźwięk: %s\n", instrument2.najwyzszy_dzwiek);
+    printf("Rok produkcji: %d\n", instrument2.rok_produkcji);
+    printf("Liczba strun: %d\n", instrument2.liczba_strun);
+    printf("Ma smyczek: %d\n", instrument2.ma_smyczek);
+    printf("Liczba tłoków: %d\n", instrument2.liczba_tlokow);
+    printf("Ma suwak: %d\n", instrument2.ma_suwak);
+
+    // 8. wywołanie funkcji fun_strukt_wsk_kopia (po odpowiedniej deklaracji i definicji)
+
 
     return 0;
 }
