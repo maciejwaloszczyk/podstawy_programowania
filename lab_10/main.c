@@ -314,7 +314,41 @@ int main() {
     printf("Ma suwak: %d\n", instrument2.ma_suwak);
 
     // 8. wywołanie funkcji fun_strukt_wsk_kopia (po odpowiedniej deklaracji i definicji)
+    Instrument *instrument3 = fun_strukt_wsk_out(&instrument1);
 
+    printf("\nWartości pól instrument3 po powrocie z fun_strukt_wsk_out:\n");
+    printf("Nazwa: %s\n", instrument3->nazwa);
+    printf("Marka: %s\n", instrument3->marka);
+    printf("Model: %s\n", instrument3->model);
+    printf("Rodzina: %s\n", instrument3->rodzina);
+    printf("Najniższy dźwięk: %s\n", instrument3->najnizszy_dzwiek);
+    printf("Najwyższy dźwięk: %s\n", instrument3->najwyzszy_dzwiek);
+    printf("Rok produkcji: %d\n", instrument3->rok_produkcji);
+    printf("Liczba strun: %d\n", instrument3->liczba_strun);
+    printf("Ma smyczek: %d\n", instrument3->ma_smyczek);
+    printf("Liczba tłoków: %d\n", instrument3->liczba_tlokow);
+    printf("Ma suwak: %d\n", instrument3->ma_suwak);
+
+    free(instrument3);
+
+    // Define a new structure type with a double, a character array, and an integer
+    typedef struct {
+        double d;
+        char tab_c[N];
+        int m;
+    } NewStruct;
+
+    // Create an instance of the new structure and initialize its fields
+    NewStruct newStructInstance;
+    newStructInstance.d = 3.14;
+    strcpy(newStructInstance.tab_c, "test");
+    newStructInstance.m = 42;
+
+    // Print the values of the fields of the new structure instance
+    printf("\nWartości pól newStructInstance:\n");
+    printf("Double: %f\n", newStructInstance.d);
+    printf("Tablica znaków: %s\n", newStructInstance.tab_c);
+    printf("Integer: %d\n", newStructInstance.m);
 
     return 0;
 }
