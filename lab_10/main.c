@@ -331,20 +331,17 @@ int main() {
 
     free(instrument3);
 
-    // Define a new structure type with a double, a character array, and an integer
     typedef struct {
         double d;
         char tab_c[N];
         int m;
     } NewStruct;
 
-    // Create an instance of the new structure and initialize its fields
     NewStruct newStructInstance;
     newStructInstance.d = 3.14;
     strcpy(newStructInstance.tab_c, "test");
     newStructInstance.m = 42;
 
-    // Print the values of the fields of the new structure instance
     printf("\nWartości pól newStructInstance:\n");
     printf("Double: %f\n", newStructInstance.d);
     printf("Tablica znaków: %s\n", newStructInstance.tab_c);
